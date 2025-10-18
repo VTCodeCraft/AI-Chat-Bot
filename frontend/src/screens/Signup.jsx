@@ -1,18 +1,42 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React , {useState} from "react";
+import { Link ,useNavigate } from "react-router-dom";
+import axios from "../config/axios";
 
 const Signup = () => {
+         const [email,setEmail] = useState('')
+         const [password,setPassword] = useState('')
+
+         const navigate = useNavigate();
+
+
+         function submitHandler(e){
+                  e.preventDefault();
+
+
+                  axios.post('/users/register',{email,password})
+                  .then(res => {
+                           console.log(res.data);
+                           navigate('/');
+                  })
+                  .catch(err => {
+                           console.log(err);
+                  })
+         
+         }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center mb-6">Create Account</h2>
 
-        <form className="space-y-5">
+        <form className="space-y-5"
+        onSubmit={submitHandler}
+        >
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email
             </label>
             <input
+              onChange={(e) => setEmail(e.target.value)}
               id="email"
               type="email"
               placeholder="Enter your email"
@@ -25,6 +49,7 @@ const Signup = () => {
               Password
             </label>
             <input
+              onChange={(e) => setPassword(e.target.value)}
               id="password"
               type="password"
               placeholder="Enter your password"
